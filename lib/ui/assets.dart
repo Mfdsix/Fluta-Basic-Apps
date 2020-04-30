@@ -17,7 +17,8 @@ class _AssetsExampleState extends State<AssetsExample> {
     Question.name("You can use IMPROVE as a noun and as a verb.", false),
     Question.name("DOZEN is equivalent to 20.", true),
     Question.name("The past tense of FIND is FOUND.", false),
-    Question.name(" EQUIVALENT TO is (more or less) the same as EQUAL TO.", true),
+    Question.name(
+        " EQUIVALENT TO is (more or less) the same as EQUAL TO.", true),
   ];
   int _position = 0;
 
@@ -31,7 +32,7 @@ class _AssetsExampleState extends State<AssetsExample> {
         ),
         backgroundColor: Colors.blueGrey,
         body: Builder(
-                  builder: (BuildContext context) => Container(
+          builder: (BuildContext context) => Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -57,35 +58,34 @@ class _AssetsExampleState extends State<AssetsExample> {
                       color: Colors.white,
                       fontSize: 16.0,
                     ),
-                    ),
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 20.0),
-                  margin: EdgeInsets.symmetric(horizontal: 40.0),
-                  width: MediaQuery.of(context).size.width,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      FlatButton.icon(
-                        onPressed: () => _giveAnswer(true, context),
+                      RaisedButton(
+                        onPressed: ()=> _previousQuestion(),
+                        child: Icon(Icons.arrow_back, color: Colors.white),
                         color: Colors.blueGrey.shade700,
-                        icon: Icon(Icons.check_box),
-                        textColor: Colors.white,
-                        label: Text("True"),
                       ),
-                      FlatButton.icon(
-                        onPressed: () => _giveAnswer(false, context),
+                      RaisedButton(
+                        onPressed:()=> _giveAnswer(true, context),
+                        child: Text("True"),
                         color: Colors.blueGrey.shade700,
-                        icon: Icon(Icons.remove_circle),
                         textColor: Colors.white,
-                        label: Text("False"),
                       ),
-                      FlatButton.icon(
-                        onPressed: () => _nextQuestion(),
+                      RaisedButton(
+                        onPressed: ()=>_giveAnswer(false, context),
+                        child: Text("False"),
                         color: Colors.blueGrey.shade700,
-                        icon: Icon(Icons.chevron_right),
                         textColor: Colors.white,
-                        label: Text("Next"),
+                      ),
+                      RaisedButton(
+                        onPressed:()=> _nextQuestion(),
+                        child: Icon(Icons.arrow_forward, color: Colors.white),
+                        color: Colors.blueGrey.shade700,
                       ),
                     ],
                   ),
@@ -98,21 +98,33 @@ class _AssetsExampleState extends State<AssetsExample> {
   }
 
   _giveAnswer(bool answer, BuildContext context) {
-    String message = "";
-    Color color = Colors.green;
-    if(answer == questions[_position].isCorrect){
-      message = "You are correct!";
-    }else{
-      message = "Oops, you are wrong !";
-      color = Colors.redAccent;
+    if (answer == questions[_position].isCorrect) {
+      final snackbar = SnackBar(
+        content: Text("You are correct!"),
+        backgroundColor: Colors.green,
+        duration: Duration(milliseconds: 500),
+      );
+      Scaffold.of(context).showSnackBar(snackbar);
+      _nextQuestion();
+    } else {
+      final snackbar = SnackBar(
+        content: Text("Oops, you are wrong !"),
+        backgroundColor: Colors.redAccent,
+        duration: Duration(milliseconds: 500),
+      );
+      Scaffold.of(context).showSnackBar(snackbar);
     }
-    final snackbar = SnackBar(content: Text(message), backgroundColor: color,duration: Duration(seconds: 1),);
-    Scaffold.of(context).showSnackBar(snackbar);
   }
 
   _nextQuestion() {
     setState(() {
-      _position = (_position+1) % questions.length;
+      _position = (_position + 1) % questions.length;
+    });
+  }
+
+  _previousQuestion() {
+    setState(() {
+      _position = (_position == 0) ? 0 : _position-1;
     });
   }
 }
