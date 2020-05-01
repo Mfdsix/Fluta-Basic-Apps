@@ -73,9 +73,9 @@ class Bizcard extends StatelessWidget {
       height: 80,
       width: 80,
       decoration: BoxDecoration(
-        borderRadius: BorderRadiusDirectional.circular(40.0),
+        borderRadius: BorderRadius.circular(40.0),
         border: Border.all(color: Colors.lightBlue, width: 2.0),
-        image: DecorationImage(image: NetworkImage("https://picsum.photos/80"),),
+        image: DecorationImage(image: NetworkImage("https://source.unsplash.com/random/200x200"),fit: BoxFit.cover),
       ),
     );
   }
